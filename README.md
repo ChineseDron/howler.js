@@ -1,3 +1,5 @@
+**NOTE:** Work is currently ongoing in the 2.0 branch. No ETA for release as of yet, but the core is fairly stable and is already under heavy production use. [Click here to view the 2.0 beta branch](https://github.com/goldfire/howler.js/tree/2.0).
+
 ![howler.js](http://goldfirestudios.com/proj/howlerjs/howlerjs_logo.png "howler.js")
 
 ## Description
@@ -17,8 +19,8 @@ More documentation, examples and demos can be found at **[howlerjs.com](http://h
 * Fade in/out sounds
 * Supports Web Audio 3D sound positioning
 * Methods can be chained
-* Uses no outside libraries, just pure Javascript
-* Lightweight, 9kb filesize (3kb gzipped)
+* Uses no outside libraries, just pure JavaScript
+* Lightweight; 12kb minified filesize (4kb gzipped)
 
 ### Browser Compatibility
 Tested in the following browsers/versions:
@@ -153,7 +155,7 @@ The following methods are used to modify all sounds globally, and are called fro
   * *ext*: `String` File extension. One of: "mp3", "opus", "ogg", "wav", "aac", "m4a", "mp4", "weba".
 
 ### iOS Playback
-By default, audio on iOS is locked until a sound is played within a user interaction, and then it plays normally the rest of the page session ([Apple documentation](https://developer.apple.com/library/safari/documentation/audiovideo/conceptual/using_html5_audio_video/PlayingandSynthesizingSounds/PlayingandSynthesizingSounds.html)). The default behavior of howler.js is to attempt to silently unlock audio playback by playing an empty buffer on the first `touchstart` event. This behavior can be disabled by calling:
+By default, audio on iOS is locked until a sound is played within a user interaction, and then it plays normally the rest of the page session ([Apple documentation](https://developer.apple.com/library/safari/documentation/audiovideo/conceptual/using_html5_audio_video/PlayingandSynthesizingSounds/PlayingandSynthesizingSounds.html)). The default behavior of howler.js is to attempt to silently unlock audio playback by playing an empty buffer on the first `touchend` event. This behavior can be disabled by calling:
 
 ```javascript
 Howler.iOSAutoEnable = false;

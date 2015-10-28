@@ -1,3 +1,12 @@
+## 1.1.28 (October 22, 2015)
+- `FIXED`: Fixed typo with iOS enabler that was preventing it from working.
+
+## 1.1.27 (October 2, 2015)
+- `FIXED`: Fixed automatic audio unlocking on iOS 9 by switching to `touchend` from `touchstart`.
+
+## 1.1.26 (April 21, 2015)
+- `FIXED`: Fixed looping in Chrome due to a change in the Web Audio spec implemented in Chrome 42.
+
 ## 1.1.25 (July 29, 2014)
 - `ADDED`: The `AudioContext` is now available on the global `Howler` object (thanks Matt DesLauriers).
 - `FIXED`: When falling back to HTML5 Audio due to XHR error, delete cache for source file to prevent multi-playback issues.
