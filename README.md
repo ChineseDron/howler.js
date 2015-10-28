@@ -1,7 +1,7 @@
 ![howler.js](http://goldfirestudios.com/proj/howlerjs/howlerjs_logo.png "howler.js")
 
 ## Description
-[**howler.js**](http://howlerjs.com) is an audio library for the modern web. It defaults to [Web Audio API](https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html) and falls back to [HTML5 Audio](http://www.whatwg.org/specs/web-apps/current-work/#the-audio-element).
+[**howler.js**](http://howlerjs.com) is an audio library for the modern web. It defaults to [Web Audio API](http://webaudio.github.io/web-audio-api/) and falls back to [HTML5 Audio](http://www.whatwg.org/specs/web-apps/current-work/#the-audio-element).
 
 More documentation, examples and demos can be found at **[howlerjs.com](http://howlerjs.com)**.
 
@@ -36,7 +36,7 @@ Tested in the following browsers/versions:
 ##### Most basic, play an MP3:
 ```javascript
 var sound = new Howl({
-  src: ['sound.ogg']
+  src: ['sound.mp3']
 });
 
 sound.play();
@@ -87,7 +87,7 @@ Set to `true` to automatically start playback when sound is loaded.
 #### mute `Boolean` `false`
 Set to `true` to load the audio muted.
 #### sprite `Object` `{}`
-Define a sound sprite for the sound. The offset and duration are defined in milliseconds. A third (optional) parameter is available to set a sprite as looping.
+Define a sound sprite for the sound. The offset and duration are defined in milliseconds. A third (optional) parameter is available to set a sprite as looping. An easy way to generate compatible sound sprites is with [audiosprite](https://github.com/tonistiigi/audiosprite).
 ```javascript
 {
   key: [offset, duration, (loop)]
@@ -98,7 +98,7 @@ The rate of playback. 0.5 to 4.0, with 1.0 being normal speed.
 #### pool `Number` `5`
 The size of the inactive sounds pool. Once sounds are stopped or finish playing, they are marked as ended and ready for cleanup. We keep a pool of these to recycle for improved performance. Generally this doesn't need to be changed. It is important to keep in mind that when a sound is paused, it won't be removed from the pool and will still be considered active so that it can be resumed later.
 #### ext `Array` `[]`
-howler.js automatically detects your file format from the extension, but you may also specify a format in situations where extraction won't work.
+howler.js automatically detects your file format from the extension, but you may also specify a format in situations where extraction won't work (such as with a SoundCloud stream).
 #### onload `Function`
 Fires when the sound is loaded.
 #### onloaderror `Function`
@@ -109,6 +109,8 @@ Fires when the sound begins playing. The first parameter is the ID of the sound.
 Fires when the sound finishes playing (if it is looping, it'll fire at the end of each loop). The first parameter is the ID of the sound.
 #### onpause `Function`
 Fires when the sound has been paused. The first parameter is the ID of the sound.
+#### onstop `Function`
+Fires when the sound has been stopped. The first parameter is the ID of the sound.
 #### onfaded `Function`
 Fires when the current sound finishes fading in/out. The first parameter is the ID of the sound.
 
@@ -119,11 +121,11 @@ Begins playback of a sound. Returns the sound id to be used with other methods. 
 * **sprite/id**: `String/Number` `optional` Takes one parameter that can either be a sprite or sound ID. If a sprite is passed, a new sound will play based on the sprite's definition. If a sound ID is passed, the previously played sound will be played (for example, after puasing it). However, if an ID of a sound that has been drained from the pool is passed, nothing will play.
 
 #### pause([id])
-Pauses playback of sound or group, saving the `pos` of playback.
+Pauses playback of sound or group, saving the `seek` of playback.
 * **id**: `Number` `optional` The sound ID. If none is passed, all sounds in group are puased.
 
 #### stop([id])
-Stops playback of sound, resetting `pos` to `0`.
+Stops playback of sound, resetting `seek` to `0`.
 * **id**: `Number` `optional` The sound ID. If none is passed, all sounds in group are stopped.
 
 #### mute([muted], [id])
@@ -141,11 +143,16 @@ Fade a currently playing sound between two volumes. Fires the `faded` event when
 * **from**: `Number` Volume to fade from (`0.0` to `1.0`).
 * **to**: `Number` Volume to fade to (`0.0` to `1.0`).
 * **duration**: `Number` Time in milliseconds to fade.
-* **id**: `Number` `optional` The sound ID. If none is passed, all sounds ing roup will fade.
+* **id**: `Number` `optional` The sound ID. If none is passed, all sounds in group will fade.
 
-#### seek([position], [id])
+#### rate([rate], [id])
+Get/set the rate of playback for a sound. This method optionally takes 0, 1 or 2 arguments.
+* **rate**: `Number` `optional` The rate of playback. 0.5 to 4.0, with 1.0 being normal speed.
+* **id**: `Number` `optional` The sound ID. If none is passed, playback rate of all sounds in group will change.
+
+#### seek([seek], [id])
 Get/set the position of playback for a sound. This method optionally takes 0, 1 or 2 arguments.
-* **position**: `Number` `optional` The position to move current playback to (in seconds).
+* **seek**: `Number` `optional` The position to move current playback to (in seconds).
 * **id**: `Number` `optional` The sound ID. If none is passed, the first sound will seek.
 
 #### loop([loop], [id])
@@ -157,26 +164,30 @@ Get/set whether to loop the sound or group. This method can optionally take 0, 1
 Check if a sound is currently playing or not, returns a `Boolean`.
 * **id**: `Number` The sound ID to check.
 
+#### duration()
+Get the duration of the audio source. Will return 0 until after the `load` event fires.
+
 #### on(event, function, [id])
 Listen for events. Multiple events can be added by calling this multiple times.
-* **event**: `String` Name of event to fire/set.
+* **event**: `String` Name of event to fire/set (`load`, `loaderror`, `play`, `end`, `pause`, `stop`, `faded`).
 * **function**: `Function` Define function to fire on event.
 * **id**: `Number` `optional` Only listen to events for this sound id.
 
 #### once(event, function, [id])
 Same as `on`, but it removes itself after the callback is fired.
-* **event**: `String` Name of event to fire/set.
+* **event**: `String` Name of event to fire/set (`load`, `loaderror`, `play`, `end`, `pause`, `stop`, `faded`).
 * **function**: `Function` Define function to fire on event.
 * **id**: `Number` `optional` Only listen to events for this sound id.
 
 #### off(event, [function], [id])
 Remove event listener that you've set.
-* **event**: `String` Name of event.
+* **event**: `String` Name of event (`load`, `loaderror`, `play`, `end`, `pause`, `stop`, `faded`).
 * **function**: `Function` `optional` The listener to remove. Omit this to remove all events of type.
 * **id**: `Number` `optional` Only remove events for this sound id.
 
 #### load()
 This is called by default, but if you set `preload` to false, you must call `load` before you can play any sounds.
+
 #### unload()
 Unload and destroy a Howl object. This will immediately stop all sounds attached to this sound and remove it from the cache.
 
@@ -193,6 +204,9 @@ Get/set the global volume for all sounds, relative to their own volume.
 #### codecs(ext)
 Check supported audio codecs. Returns `true` if the codec is supported in the current browser.
 * **ext**: `String` File extension. One of: "mp3", "opus", "ogg", "wav", "aac", "m4a", "mp4", "weba".
+
+#### unload()
+Unload and destroy all currently loaded Howl objects. This will immediately stop all sounds and remove them from cache.
 
 
 ### Global Core Properties

@@ -1,10 +1,10 @@
 /*!
  *  Effects Plugin - Adds advanced Web Audio API functionality.
  *  
- *  howler.js v2.0.0-beta
+ *  howler.js v2.0.0-beta3
  *  howlerjs.com
  *
- *  (c) 2013-2014, James Simpson of GoldFire Studios
+ *  (c) 2013-2015, James Simpson of GoldFire Studios
  *  goldfirestudios.com
  *
  *  MIT License
@@ -62,7 +62,7 @@
 
     if (typeof x === 'number') {
       self._pos = [x, y, z];
-      self.ctx.listener.setPosition(self._pos[0], self._pos[1], self._Pos[2]);
+      self.ctx.listener.setPosition(self._pos[0], self._pos[1], self._pos[2]);
     } else {
       return self._pos;
     }
@@ -84,7 +84,7 @@
    * @param  {Number} zUp The z-orientation of the top of the listener.
    * @return {Howler/Array}     Returns self or the current orientation vectors.
    */
-  HowlerGlobal.prototype.orientatin = function(x, y, z, xUp, yUp, zUp) {
+  HowlerGlobal.prototype.orientation = function(x, y, z, xUp, yUp, zUp) {
     var self = this;
 
     // Stop right here if not using Web Audio.

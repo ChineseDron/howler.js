@@ -38,11 +38,7 @@ var sound4 = new Howl({
 
 // Define the tests to run.
 var id;
-var tests = [
-  /**
-   * WEB AUDIO
-   */
-  
+var webaudio = [
   function(fn) {
     sound1.once('play', function() {
       label.innerHTML = 'PLAYING';
@@ -86,7 +82,7 @@ var tests = [
     label.innerHTML = 'FADE OUT';
     sound1.once('faded', function() {
       fn();
-    });
+    }, id);
   },
 
   function(fn) {
@@ -95,7 +91,7 @@ var tests = [
     label.innerHTML = 'FADE IN';
     sound1.once('faded', function() {
       fn();
-    });
+    }, id);
   },
 
   function(fn) {
@@ -166,7 +162,9 @@ var tests = [
 
     label.innerHTML = 'FADE OUT GROUP';
     sound1.once('faded', function() {
-      fn();
+      if (sound1._onfaded.length === 0) {
+        fn();
+      }
     });
   },
 
@@ -175,7 +173,9 @@ var tests = [
 
     label.innerHTML = 'FADE IN GROUP';
     sound1.once('faded', function() {
-      fn();
+      if (sound1._onfaded.length === 0) {
+        fn();
+      }
     });
   },
 
@@ -220,19 +220,27 @@ var tests = [
   },
 
   function(fn) {
+    var sprite = sound3.play('one');
+    sound3.loop(true, sprite);
+
+    label.innerHTML = 'LOOP SPRITE';
+    setTimeout(function() {
+      sound3.loop(false, sprite);
+      fn();
+    }, 3000);
+  },
+
+  function(fn) {
     sound3.fade(1, 0, 2000, id);
 
     label.innerHTML = 'FADE OUT SPRITE';
     sound3.once('faded', function() {
       fn();
     });
-  },
+  }
+];
 
-
-  /**
-   * HTML5 AUDIO
-   */
-  
+var html5 = [
    function(fn) {
     id = sound2.play();
 
@@ -354,7 +362,9 @@ var tests = [
 
     label.innerHTML = 'FADE OUT GROUP (HTML5)';
     sound2.once('faded', function() {
-      fn();
+      if (sound2._onfaded.length === 0) {
+        fn();
+      }
     });
   },
 
@@ -363,7 +373,9 @@ var tests = [
 
     label.innerHTML = 'FADE IN GROUP (HTML5)';
     sound2.once('faded', function() {
-      fn();
+      if (sound2._onfaded.length === 0) {
+        fn();
+      }
     });
   },
 
@@ -416,6 +428,9 @@ var tests = [
     });
   }
 ];
+
+// If Web Audio is available, use both tets; otherwise, just hTML5.
+var tests = Howler.usingWebAudio ? webaudio.concat(html5) : html5;
 
 // Create a method that will call the next in the series.
 var chain = function(i) {

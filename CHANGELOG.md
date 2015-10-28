@@ -16,12 +16,16 @@ Howler.js now also has the concept of plugins. The core represents 100% compatib
 - `ADDED`: The new structure allows for full control of sprite playback (this was buggy or didn't work at all before).
 - `ADDED`: New `once` method to setup event listeners that will automatically remove themselves once fired.
 - `ADDED`: New `playing` method that will return `true` if the specified sound is currently playing.
+- `ADDED`: New `duration` method that will return the duration of the audio source.
 - `ADDED`: New `preload` property to allow disabling the auto-preload functionality.
 - `ADDED`: New `faded` event that fires at the completion of a fade-in or fade-out.
+- `ADDED`: New `stop` event that fires when `stop` is called, but not when the sound ends (`end` event already exists for that).
 - `ADDED`: New `pool` property to allow setting the inactive sound pool size (for advanced use, still defaults to 5).
 - `ADDED`: Third parameter to `on`, `once` and `off` to allow listening or removing events for only a specific sound id.
 - `ADDED`: The following methods now alter all sounds within a `Howl` group when no `id` is passed: `pause`, `stop`, `volume`, `fade`, `mute`, `loop`.
 - `ADDED`: The `rate` property now changes the playback rate on both Web Audio and HTML5 Audio.
+- `ADDED`: New `rate` method that allows changing playback rate at runtime.
+- `ADDED`: New global `unload` method.
 - `ADDED`: Support for .webm extension in addition to .weba.
 - `ADDED`: New codec recommendations and notes have been added to the documentation.
 - `ADDED`: (Effects) New `Howler` listener methods `pos`, `orientation`, `velocity` and `listenerAttr`.
@@ -33,9 +37,12 @@ Howler.js now also has the concept of plugins. The core represents 100% compatib
 - `UPDATED`: The global, group and single sound `mute` and `unmute` methods have been combined into a single `mute` method.
 - `UPDATED`: The AMD definition is now namespaced to `howler`.
 - `UPDATED`: The deprecated `fadeIn` and `fadeOut` methods have been removed in favor of the single `fade` method.
+- `UPDATED`: Improved the `ext` property and made it especially usefully for playing streams (for example, SoundCloud).
 - `UPDATED`: The `fade` method now only uses timeouts as a fallback with HTML5 Audio.
 - `UPDATED`: Moved any needed try/catch statements into own methods to prevent de-optimization in V8 and others.
 - `UPDATED`: Updated and improved overall documentation.
+- `UPDATED`: Fades are now automatically stopped when a new one is started, volume is changed or the sound is paused/stopped.
+- `UPDATED`: Automatically checks for disabled audio in Internet Explorer.
 - `FIXED`: The event system has been overhauled to be more reliable.
 - `FIXED`: Methods called before a sound has loaded no longer cause events to stick in the queue.
 - `FIXED`: The `end` event correctly fires at the end of each loop when using Web Audio.
@@ -43,8 +50,11 @@ Howler.js now also has the concept of plugins. The core represents 100% compatib
 - `FIXED`: Fixed several issues with playback timing after pausing sounds.
 - `FIXED`: Improved support for seeking a sound while it is playing.
 - `FIXED`: When playback rate is changed, the `end` event now fires at the correct time.
+- `FIXED`: Fixed a potential memory leak when using the `unload` method.
 - `FIXED`: Calling `pause` on a sound that hasn't yet loaded now works correctly.
 - `FIXED`: Muting a sound while it is fading now works.
+- `FIXED`: Playback of base64 encoded sounds in Internet Explorer 9.
+- `FIXED`: MIME check for some base64 encoded MP3's.
 
 ## 1.1.25 (July 29, 2014)
 - `ADDED`: The `AudioContext` is now available on the global `Howler` object (thanks Matt DesLauriers).
